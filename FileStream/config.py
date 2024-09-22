@@ -19,7 +19,7 @@ class Telegram:
     FILE_PIC = env.get('FILE_PIC', "https://amshop.cloud/test/uploads/teleservices_66edd863896de4.18136180.jpg")
     START_PIC = env.get('START_PIC', "https://amshop.cloud/test/uploads/teleservices_66edd863896de4.18136180.jpg")
     VERIFY_PIC = env.get('VERIFY_PIC', "https://amshop.cloud/test/uploads/teleservices_66edd863896de4.18136180.jpg")
-    MULTI_CLIENT = True
+    MULTI_CLIENT = False
     FLOG_CHANNEL = int(env.get("FLOG_CHANNEL", '-1002358747296'))   # Logs channel for file logs
     ULOG_CHANNEL = int(env.get("ULOG_CHANNEL", '-1002358747296'))   # Logs channel for user logs
     MODE = env.get("MODE", "secondary")
