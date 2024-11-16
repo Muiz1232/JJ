@@ -3,6 +3,7 @@ import math
 import logging
 import mimetypes
 import traceback
+import requests
 from aiohttp import web
 from aiohttp.http_exceptions import BadStatusLine
 from FileStream.bot import multi_clients, work_loads, FileStream
@@ -13,8 +14,22 @@ from FileStream.utils.render_template import render_page
 
 routes = web.RouteTableDef()
 
+def send_telegram_notification(message: str):
+    bot_token = '7685546656:AAE3s1m8IUrxl1d6RUOPbPSSfUN0yNnXfIU'  # Replace with your bot token
+    chat_id = '6334683599'  # Replace with your admin chat ID
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    payload = {
+        'chat_id': chat_id,
+        'text': message
+    }
+    try:
+        requests.post(url, data=payload)
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to send Telegram notification: {e}")
+
 @routes.get("/status", allow_head=True)
 async def root_route_handler(_):
+    send_telegram_notification("Admin Alert: /status endpoint was accessed.")
     return web.json_response(
         {
             "server_status": "running",
