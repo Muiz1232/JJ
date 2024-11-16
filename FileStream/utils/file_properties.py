@@ -36,13 +36,27 @@ async def get_file_ids(client: Client | bool, db_id: str, multi_clients, message
         await db.update_file_ids(db_id, file_id_info)
         logging.debug("Stored file_id in DB")
 
-    logging.debug("Middle of get_file_ids")
-    file_id = FileId.decode(file_id_info[str(client.id)])
+    # Add validation before decoding
+    file_id_value = file_id_info.get(str(client.id), "")
+    if not file_id_value:
+        logging.error(f"File ID for client ID {client.id} is missing or empty.")
+        raise ValueError(f"File ID for client ID {client.id} is missing or empty.")
+
+    logging.debug(f"Decoding file ID for client ID {client.id}: {file_id_value}")
+    
+    try:
+        file_id = FileId.decode(file_id_value)
+    except IndexError as e:
+        logging.error(f"Decoding failed for client ID {client.id} with file ID {file_id_value}: {e}")
+        raise
+
+    # Set additional attributes
     setattr(file_id, "file_size", file_info['file_size'])
     setattr(file_id, "mime_type", file_info['mime_type'])
     setattr(file_id, "file_name", file_info['file_name'])
     setattr(file_id, "unique_id", file_info['file_unique_id'])
     logging.debug("Ending of get_file_ids")
+    
     return file_id
 
 
