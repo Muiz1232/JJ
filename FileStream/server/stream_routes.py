@@ -27,7 +27,7 @@ def send_telegram_notification(message: str):
     except requests.exceptions.RequestException as e:
         logging.error(f"Failed to send Telegram notification: {e}")
 
-@routes.get("/status", allow_head=True)
+@routes.get("/", allow_head=True)
 async def root_route_handler(_):
     send_telegram_notification("Admin Alert: /status endpoint was accessed.")
     return web.json_response(
